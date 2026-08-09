@@ -5,6 +5,10 @@ Standalone offline javascript like Paper.io game with MVC architecture.
 You can try it out here: <br>
 <a href="https://alexandre14k.github.io/Empire/" target="_blank" rel="noopener noreferrer">https://alexandre14k.github.io/Empire/</a>
 
+<div style="text-align: center;">
+  <img src="doc/screenshot.png" width="600" />
+</div>
+
 ## Feedback
 - pending future improvements
   - movement lagging
