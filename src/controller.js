@@ -18,19 +18,24 @@ class GameController {
 
   start() {
     window.addEventListener("keydown", (event) => this.onKeyDown(event));
-    // touch events for mobile (tap-to-move)
+
+    // map touch events to the view's eventPoint so touches are transformed
+    // to game coordinates taking canvas scaling and camera into account
     window.addEventListener("touchstart", (e) => {
       if (!e.touches || e.touches.length === 0) return;
       const t = e.touches[0];
-      // client coords should map to game coords when canvas fills viewport
-      this.model.setTarget(t.clientX, t.clientY);
+      const fake = { clientX: t.clientX, clientY: t.clientY };
+      const pt = this.view.eventPoint(fake);
+      this.model.setTarget(pt.x, pt.y);
       e.preventDefault();
     }, { passive: false });
 
     window.addEventListener("touchmove", (e) => {
       if (!e.touches || e.touches.length === 0) return;
       const t = e.touches[0];
-      this.model.setTarget(t.clientX, t.clientY);
+      const fake = { clientX: t.clientX, clientY: t.clientY };
+      const pt = this.view.eventPoint(fake);
+      this.model.setTarget(pt.x, pt.y);
       e.preventDefault();
     }, { passive: false });
 
