@@ -17,7 +17,7 @@ class BotsHelper {
   }
 
   // Find a nearby opponent trail point the bot can try to strike (low-cost heuristic)
-  static findNearestEnemyTrail(bot, model, maxDist = 120) {
+  static findNearestEnemyTrail(bot, model, maxDist = 140) {
     let best = null;
     let bestDist = Infinity;
 
@@ -69,7 +69,7 @@ class BotsHelper {
   // Async think tick for bots — updates thinkTarget without blocking main loop
   static scheduleThinking(bots, model) {
     if (typeof requestIdleCallback === 'function') {
-      requestIdleCallback(() => BotsHelper.think(bots, model), { timeout: 50 });
+      requestIdleCallback(() => BotsHelper.think(bots, model), { timeout: 60 });
     } else {
       setTimeout(() => BotsHelper.think(bots, model), 20);
     }
@@ -80,28 +80,22 @@ class BotsHelper {
 
     bots.forEach((bot) => {
       // throttle thinking per-bot
-      if (now - (bot.lastThink || 0) < 120) return;
+      if (now - (bot.lastThink || 0) < 80) return;
       bot.lastThink = now;
 
       const risk = BotsHelper.predictClosingRisk(bot, model);
-      const candidate = BotsHelper.findNearestEnemyTrail(bot, model, 140);
+      const candidate = BotsHelper.findNearestEnemyTrail(bot, model, 160);
 
-      if (risk > 0) {
-        // prefer escape unless there's a close, low-risk strike
-        if (candidate && candidate.owner !== bot.id && M.hypot(candidate.x - bot.x, candidate.y - bot.y) < 80) {
-          bot.thinkTarget = { x: candidate.x, y: candidate.y, mode: 'strike' };
-        } else {
-          // escape to home or away from nearest threat
-          const home = model.homeTarget(bot) || { x: model.cx, y: model.cy };
-          const awayX = bot.x + (bot.x - model.player.x);
-          const awayY = bot.y + (bot.y - model.player.y);
-          bot.thinkTarget = { x: (awayX + home.x) / 2, y: (awayY + home.y) / 2, mode: 'escape' };
-        }
-      } else if (candidate) {
-        // low risk: try a strike
+      // AGGRESSIVE behavior: prefer strikes when there's any reachable candidate
+      if (candidate) {
         bot.thinkTarget = { x: candidate.x, y: candidate.y, mode: 'strike' };
+      } else if (risk > 0) {
+        // escape to home or away from nearest threat
+        const home = model.homeTarget(bot) || { x: model.cx, y: model.cy };
+        const awayX = bot.x + (bot.x - model.player.x);
+        const awayY = bot.y + (bot.y - model.player.y);
+        bot.thinkTarget = { x: (awayX + home.x) / 2, y: (awayY + home.y) / 2, mode: 'escape' };
       } else {
-        // no candidate: clear think target so regular steering applies
         bot.thinkTarget = null;
       }
     });
