@@ -1,0 +1,1 @@
+Merged changes from fix/encirclement-escape-ai: aggressive bot AI, async thinking, encirclement defeat + cleanup, movement smoothing and touch controls, repo refactor into helper modules.
