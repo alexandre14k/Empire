@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Empire</title>
+    <link rel="stylesheet" href="src/style.css">
+  </head>
+  <body>
+    <main class="app" data-app>
+      <div class="hud-layer">
+        <div class="brand">Empire</div>
+        <div class="status-message" data-message></div>
+        <form class="start-panel" data-start-form>
+          <input
+            data-name
+            maxlength="18"
+            name="name"
+            placeholder="Name"
+            type="text"
+          >
+          <button type="submit">Start</button>
+        </form>
+        <section class="hud" aria-label="Game status">
+          <div>
+            <span class="label">Name</span>
+            <strong data-player-name>-</strong>
+          </div>
+          <div>
+            <span class="label">Area</span>
+            <strong data-area>0%</strong>
+          </div>
+          <div>
+            <span class="label">Lost</span>
+            <strong data-lost>0%</strong>
+          </div>
+          <div>
+            <span class="label">Kills</span>
+            <strong data-conquered>0</strong>
+          </div>
+          <div>
+            <span class="label">State</span>
+            <strong data-state>Ready</strong>
+          </div>
+          <button type="button" data-restart>Restart</button>
+        </section>
+      </div>
+      <section class="stage" data-stage>
+        <canvas data-canvas aria-label="Game board"></canvas>
+        <canvas
+          class="mini-map"
+          data-mini-map
+          width="150"
+          height="150"
+          aria-label="Mini map"
+        ></canvas>
+        <aside class="ranking" data-ranking aria-label="Ranking progress">
+        </aside>
+      </section>
+      <div class="dialog-overlay" data-dialog hidden>
+        <div class="dialog">
+          <p data-dialog-message></p>
+          <button type="button" data-dialog-restart>Continue</button>
+        </div>
+      </div>
+    </main>
+    <script src="src/config.js"></script>
+    <script src="src/model.js"></script>
+    <script src="src/view.js"></script>
+    <script src="src/controller.js"></script>
+    <script src="src/index.js"></script>
+  </body>
+</html>
